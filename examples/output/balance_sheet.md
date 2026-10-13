@@ -1,0 +1,14 @@
+| side | category | amount_bn |
+| :- | :- | :- |
+| assets | cash | 10.000000 |
+| assets | securities | 55.000000 |
+| assets | ci | 55.224070 |
+| assets | cre | 40.060087 |
+| assets | mortgage | 49.745605 |
+| assets | cards | 14.789941 |
+| assets | other_consumer | 15.180297 |
+| assets | other_assets | 12.736472 |
+| assets | allowance_contra_asset | -2.736472 |
+| funding | deposits | 196.000000 |
+| funding | borrowings | 30.000000 |
+| funding | equity_including_at1 | 24.000000 |

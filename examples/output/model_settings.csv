@@ -1,0 +1,16 @@
+parameter,value
+seed,20230727
+projection_quarters,9
+baseline_scenario_quarters,13
+adverse_scenario_quarters,13
+forecast_quarters,8
+reversion_quarters,4
+relative_pd_threshold,2
+deposit_beta,0.5
+tax_rate_assumed,0.25
+adverse_shock_bn,0.5
+scb_floor,0.025
+minimum_cet1_ratio,0.045
+illustrative_output_floor_factor,0.725
+ilm_assumed,1
+historical_proposal_year,2023

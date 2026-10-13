@@ -1,0 +1,13 @@
+side,category,amount_bn
+assets,cash,10
+assets,securities,55
+assets,ci,55.2240702908
+assets,cre,40.060086701
+assets,mortgage,49.7456053515
+assets,cards,14.7899407106
+assets,other_consumer,15.1802969461
+assets,other_assets,12.736471778
+assets,allowance_contra_asset,-2.736471778
+funding,deposits,196
+funding,borrowings,30
+funding,equity_including_at1,24

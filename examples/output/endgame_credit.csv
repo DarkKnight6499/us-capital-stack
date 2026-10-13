@@ -1,0 +1,9 @@
+exposure,balance_bn,current_weight,expanded_weight,status,current_credit_rwa,expanded_credit_rwa,rwa_change
+ci,55.2240702908,1,0.895,Verified conditional 2023 weights; synthetic public investment-grade share,55.2240702908,49.4255429102,-5.79852738053
+cre,40.060086701,1,1.1,"stylized/unverified aggregate CRE proxy, not an LTV rule table",40.060086701,44.0660953711,4.0060086701
+mortgage,49.7456053515,0.5,0.6,"stylized/unverified aggregate mortgage proxy, not an LTV rule table",24.8728026758,29.8473632109,4.97456053515
+cards,14.7899407106,1,0.79,Verified conditional 2023 weights; synthetic regulatory-retail and transactor classification,14.7899407106,11.6840531614,-3.10588754923
+other_consumer,15.1802969461,1,0.85,Verified conditional 2023 weight; assumed qualifying regulatory retail,15.1802969461,12.9032524041,-2.27704454191
+securities,55,0.2,0.2,"Assumed GSE exposure, no securitization or trading overlap",11,11,0
+cash,10,0,0,Assumed central-bank balances,0,0,0
+other_assets,12.736471778,1,1,stylized/unverified generic asset classification,12.736471778,12.736471778,0

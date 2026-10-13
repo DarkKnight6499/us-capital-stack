@@ -1,0 +1,6 @@
+name,balance,annual_pd,lgd,maturity_quarters,annual_prepayment,effective_rate,unemployment_beta,house_beta,spread_beta,collateral,collateral_beta,repricing_speed,short_rate_weight,origination_pd,default_fraction
+ci,55.2240702908,0.012,0.42,20,0.06,0.065,0.16,0.32,0.12,,0,0.2,0.8,,0.003
+cre,40.060086701,0.018,0.28,28,0.04,0.062,0.2,0.56,0.12,cre_prices,0.5,0.15,0.6,,0.003
+mortgage,49.7456053515,0.006,0.18,80,0.1,0.052,0.18,0.96,0.06,house_prices,0.6,0.04,0.15,,0.003
+cards,14.7899407106,0.035,0.88,12,0.03,0.19,0.17,0.08,0.04,,0,0.6,0.8,,0.003
+other_consumer,15.1802969461,0.022,0.65,20,0.08,0.085,0.19,0.24,0.05,,0,0.1,0.8,,0.003

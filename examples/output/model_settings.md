@@ -1,0 +1,17 @@
+| parameter | value |
+| :- | :- |
+| seed | 20230727.000000 |
+| projection_quarters | 9.000000 |
+| baseline_scenario_quarters | 13.000000 |
+| adverse_scenario_quarters | 13.000000 |
+| forecast_quarters | 8.000000 |
+| reversion_quarters | 4.000000 |
+| relative_pd_threshold | 2.000000 |
+| deposit_beta | 0.500000 |
+| tax_rate_assumed | 0.250000 |
+| adverse_shock_bn | 0.500000 |
+| scb_floor | 0.025000 |
+| minimum_cet1_ratio | 0.045000 |
+| illustrative_output_floor_factor | 0.725000 |
+| ilm_assumed | 1.000000 |
+| historical_proposal_year | 2023.000000 |

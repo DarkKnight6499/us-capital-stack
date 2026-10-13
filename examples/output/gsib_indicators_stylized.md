@@ -1,0 +1,14 @@
+| indicator | category | amount_bn | denominator_bn | weight | uncapped_score_bp | score_bp |
+| :- | :- | :- | :- | :- | :- | :- |
+| total_exposures | size | 270.000000 | 100000.000000 | 0.200000 | 5.400000 | 5.400000 |
+| intra_financial_assets | interconnectedness | 12.000000 | 12000.000000 | 0.066700 | 0.667000 | 0.667000 |
+| intra_financial_liabilities | interconnectedness | 15.000000 | 11000.000000 | 0.066700 | 0.909545 | 0.909545 |
+| securities_outstanding | interconnectedness | 28.000000 | 22000.000000 | 0.066700 | 0.848909 | 0.848909 |
+| payments | substitutability | 2200.000000 | 3000000.000000 | 0.066700 | 0.489133 | 0.489133 |
+| assets_under_custody | substitutability | 150.000000 | 160000.000000 | 0.066700 | 0.625313 | 0.625313 |
+| underwriting | substitutability | 35.000000 | 8000.000000 | 0.066700 | 2.918125 | 2.918125 |
+| otc_derivatives | complexity | 900.000000 | 700000.000000 | 0.066700 | 0.857571 | 0.857571 |
+| trading_and_afs | complexity | 40.000000 | 13000.000000 | 0.066700 | 2.052308 | 2.052308 |
+| level3_assets | complexity | 2.000000 | 1800.000000 | 0.066700 | 0.741111 | 0.741111 |
+| cross_jurisdiction_claims | cross_jurisdiction | 18.000000 | 27000.000000 | 0.100000 | 0.666667 | 0.666667 |
+| cross_jurisdiction_liabilities | cross_jurisdiction | 20.000000 | 24000.000000 | 0.100000 | 0.833333 | 0.833333 |

@@ -1,0 +1,4 @@
+| scenario | assets_bn | opening_allowance_bn | starting_cet1_ratio | total_ppnr_bn | total_provision_bn | total_other_losses_bn | total_credit_losses_bn | credit_losses_to_opening_loans | total_net_income_bn | total_distributions_bn | ending_cet1_bn | minimum_cet1_ratio | minimum_quarter | ending_cet1_ratio | peak_to_trough_decline | closing_allowance_bn |
+| :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- | :- |
+| baseline | 250.000000 | 2.736472 | 0.118068 | 12.693931 | 2.796590 | 0.000000 | 2.947979 | 0.016846 | 7.423006 | 2.970000 | 25.453006 | 0.120205 | 1 | 0.138860 | 0.000000 | 2.585083 |
+| severely_adverse | 250.000000 | 2.736472 | 0.118068 | 8.947427 | 12.934363 | 0.500000 | 10.919001 | 0.062394 | -4.707783 | 2.970000 | 13.322217 | 0.071313 | 9 | 0.071313 | 0.046754 | 4.751834 |
