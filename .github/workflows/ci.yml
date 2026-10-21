@@ -15,3 +15,4 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: python examples/run_capital_plan.py
       - run: python examples/run_sensitivity.py
+      - run: python examples/run_leverage.py

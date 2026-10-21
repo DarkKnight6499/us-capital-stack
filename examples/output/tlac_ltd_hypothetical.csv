@@ -1,5 +1,5 @@
 check,eligible_amount_bn,minimum_bn,headroom_bn,meets_hypothetical_minimum,applicable,scope
 tlac_risk,40,32.0154604384,7.9845395616,True,False,US GSIB minimum only; eligibility asserted; distribution buffers excluded
-tlac_leverage,40,20.25,19.75,True,False,US GSIB minimum only; eligibility asserted; distribution buffers excluded
+tlac_leverage,40,29.4603473982,10.5396526018,True,False,US GSIB minimum only; eligibility asserted; distribution buffers excluded
 ltd_risk,14.5,10.6718201461,3.82817985387,True,False,US GSIB minimum only; eligibility asserted; distribution buffers excluded
-ltd_leverage,14.5,6.75,7.75,True,False,US GSIB minimum only; eligibility asserted; distribution buffers excluded
+ltd_leverage,14.5,9.82011579941,4.67988420059,True,False,US GSIB minimum only; eligibility asserted; distribution buffers excluded

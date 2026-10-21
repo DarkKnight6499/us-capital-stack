@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from .models import Bank, Portfolio
+from . import leverage_config as leverage_config
 from .scenario import LONG_RUN, MACRO_COLUMNS, Scenario
 
 DEFAULT_SEED = 20230727
@@ -81,3 +82,62 @@ def loan_balance_paths(bank: Bank, scenario: Scenario) -> pd.DataFrame:
         current = {name: balance * (1 + float(growth)) for name, balance in current.items()}
         rows.append({"quarter": index + 1, **current})
     return pd.DataFrame(rows)
+
+
+def synthetic_leverage_inputs(bank: Bank | None = None, seed: int = DEFAULT_SEED):
+    """Create illustrative leverage inputs in USD bn, independent of existing RNG streams."""
+    from .leverage import LeverageInputs
+
+    bank = synthetic_bank(seed) if bank is None else bank
+    rng = np.random.default_rng(seed)
+    period = pd.Timestamp(leverage_config.ILLUSTRATIVE_AS_OF).to_period("Q")
+    business_days = pd.date_range(period.start_time, period.end_time, freq="B")
+    calendar_days = pd.date_range(period.start_time, period.end_time.normalize(), freq="D")
+    assets = pd.Series(bank.assets * (1 + rng.normal(0., leverage_config.ILLUSTRATIVE_ASSET_NOISE,
+                                                   len(business_days))), index=business_days)
+    assets = assets.reindex(calendar_days).ffill().bfill()
+    assets *= bank.assets / assets.mean()
+    daily = pd.DataFrame({leverage_config.DATE: calendar_days, leverage_config.ASSETS: assets.to_numpy(),
+                          leverage_config.SALES: leverage_config.ILLUSTRATIVE_SALES,
+                          leverage_config.DEDUCTIONS: bank.equity - bank.at1 - bank.cet1,
+                          leverage_config.RECEIVED_SECURITIES: leverage_config.ILLUSTRATIVE_RECEIVED_SECURITIES,
+                          leverage_config.DERIVATIVE_ASSETS: leverage_config.ILLUSTRATIVE_DERIVATIVE_ASSETS,
+                          leverage_config.CENTRAL_BANK: leverage_config.ILLUSTRATIVE_CENTRAL_BANK_DEPOSITS,
+                          leverage_config.CUSTODIAL_DEPOSITS: leverage_config.ILLUSTRATIVE_CUSTODIAL_DEPOSITS})
+    count = leverage_config.ILLUSTRATIVE_NETTING_SETS
+    derivatives = pd.DataFrame({
+        leverage_config.NETTING_SET: [f"netting_set_{number}" for number in range(count)],
+        leverage_config.COUNTERPARTY_TYPE: [leverage_config.ILLUSTRATIVE_COMMERCIAL_COUNTERPARTY
+                                            if number % leverage_config.ILLUSTRATIVE_END_USER_INTERVAL == 0
+                                            else leverage_config.ILLUSTRATIVE_FINANCIAL_COUNTERPARTY for number in range(count)],
+        leverage_config.END_USER: [number % leverage_config.ILLUSTRATIVE_END_USER_INTERVAL == 0 for number in range(count)],
+        leverage_config.V: rng.uniform(*leverage_config.ILLUSTRATIVE_V_RANGE, count),
+        leverage_config.ADDON: rng.uniform(*leverage_config.ILLUSTRATIVE_ADDON_RANGE, count),
+        leverage_config.CVM_RECEIVED: rng.uniform(*leverage_config.ILLUSTRATIVE_CVM_RANGE, count),
+        leverage_config.CVM_POSTED: rng.uniform(*leverage_config.ILLUSTRATIVE_CVM_RANGE, count),
+        leverage_config.CVM_ELIGIBLE: [number % leverage_config.ILLUSTRATIVE_INELIGIBLE_CVM_INTERVAL != 0 for number in range(count)]})
+    protection = pd.DataFrame(leverage_config.ILLUSTRATIVE_PROTECTION,
+                              columns=[leverage_config.REFERENCE, leverage_config.SOLD, leverage_config.PURCHASED,
+                                       leverage_config.MATCHED_HEDGE, leverage_config.CET1_LOSS])
+    repos = pd.DataFrame(leverage_config.ILLUSTRATIVE_REPOS,
+                         columns=[leverage_config.COUNTERPARTY, leverage_config.REPO_NETTING_SET,
+                                  leverage_config.QMNA, leverage_config.E, leverage_config.C,
+                                  leverage_config.GROSS_RECEIVABLE, leverage_config.ON_BALANCE_RECEIVABLE,
+                                  leverage_config.NETTING_MET])
+    commitments = pd.DataFrame(leverage_config.ILLUSTRATIVE_COMMITMENTS,
+                               columns=[leverage_config.COMMITMENT_TYPE, leverage_config.MATURITY, leverage_config.NOTIONAL])
+    months = pd.date_range(period.start_time, period.end_time, freq=pd.offsets.MonthEnd())
+
+    def snapshots(frame: pd.DataFrame, columns: tuple[str, ...]) -> pd.DataFrame:
+        pieces = []
+        for month, scale in zip(months, leverage_config.ILLUSTRATIVE_MONTH_SCALES):
+            piece = frame.copy()
+            piece.loc[:, list(columns)] = piece.loc[:, list(columns)] * scale
+            piece[leverage_config.MONTH] = month
+            pieces.append(piece)
+        return pd.concat(pieces, ignore_index=True)
+
+    return LeverageInputs(daily, snapshots(derivatives, leverage_config.DERIVATIVE_AMOUNT_COLUMNS),
+                          snapshots(protection, leverage_config.PROTECTION_AMOUNT_COLUMNS),
+                          snapshots(repos, leverage_config.REPO_AMOUNT_COLUMNS),
+                          snapshots(commitments, (leverage_config.NOTIONAL,)))

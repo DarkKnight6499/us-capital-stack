@@ -12,6 +12,7 @@ Run from the project root with Python, NumPy, and pandas available. The examples
 python -m unittest discover -s tests -v
 python examples/run_capital_plan.py
 python examples/run_sensitivity.py
+python examples/run_leverage.py
 ```
 
 For use as an installed library:
@@ -28,7 +29,7 @@ print(plan.tables["capital_results_display"])
 print(plan.tables["requirements"])
 ```
 
-The examples write CSV and Markdown tables under [examples/output](examples/output/). Start with [capital_plan_summary.md](examples/output/capital_plan_summary.md). Both examples use seed `20230727` through `numpy.random.default_rng`. CSV files retain more precision than the display tables. The CI workflow is configured to run the same suite and examples across its Python version matrix.
+The examples write CSV and Markdown tables under [examples/output](examples/output/). Start with [capital_plan_summary.md](examples/output/capital_plan_summary.md). All examples use seed `20230727` through `numpy.random.default_rng`. CSV files retain more precision than the display tables. The CI workflow is configured to run the same suite and examples across its Python version matrix.
 
 ## Methodology
 
@@ -54,7 +55,7 @@ Detailed equations, coefficients, units, timing, and exclusions are in [docs/met
 
 ## Validation and actual results
 
-The final run passed **123 unittest tests**, and both examples completed successfully. Tests cover independent analytic ECL benchmarks, probability and principal conservation, allowance and CET1 accounting, provision additivity, monotone stress responses, IFRS staging, deposit beta, SCB timing and floor, binding and nonbinding output floors, operational-risk bands, GSIB buckets, debt maturity boundaries, CSV round trips, and invalid or misaligned inputs. Missing portfolio provisions are rejected before aggregation. Calibration tests additionally enforce the capital, credit-loss, PPNR, and Endgame ranges below without changing the accounting or regulatory formulas.
+The final run passed **160 unittest tests**, and all three examples completed successfully. Tests cover independent analytic ECL benchmarks, probability and principal conservation, allowance and CET1 accounting, provision additivity, monotone stress responses, IFRS staging, deposit beta, SCB timing and floor, binding and nonbinding output floors, operational-risk bands, GSIB buckets, debt maturity boundaries, CSV round trips, and invalid or misaligned inputs. Missing portfolio provisions are rejected before aggregation. Calibration tests additionally enforce the capital, credit-loss, PPNR, and Endgame ranges below without changing the accounting or regulatory formulas.
 
 All results below come from the generated CSV files, with monetary amounts in USD billions.
 
@@ -138,10 +139,11 @@ For domestic Federal Reserve files, `load_fed_scenario` maps common published he
 | `src/capital_stack/data.py`, `models.py`, `scenario.py` | Synthetic inputs, validated data types, and CSV loading |
 | `cecl.py`, `numerics.py` | Lifetime losses, IFRS comparison, hazards, amortization, and bisection |
 | `ppnr.py`, `projection.py` | Revenue, provisions, capital actions, RWA, and SCB |
+| `leverage.py`, `leverage_config.py` | SLR, exposure components, buffers, configuration, and projection views |
 | `endgame.py`, `systemic.py` | Historical framework comparison, Method 1, TLAC, and debt minima |
 | `planning.py`, `reporting.py`, `validation.py` | End-to-end orchestration, tables, and alignment validation |
 | `tests/` | Standard-library unittest suite |
-| `examples/` | Runnable capital-plan and sensitivity examples |
+| `examples/` | Runnable capital-plan, sensitivity, and leverage examples |
 | `docs/` | Model methodology and regulatory verification register |
 | `.github/workflows/ci.yml` | Test and example workflow |
 
@@ -151,7 +153,95 @@ All bank data, macro paths, credit coefficients, and portfolio classifications a
 
 The capital projection omits a full quarterly funding balance sheet, liquidity, security valuation and AOCI, evolving regulatory deductions, tax-asset realizability, management remediation, and distribution approvals. RWA migration is a stylized overlay. Endgame results use historical proposal mechanics and omit LTV tables, allowance RWA adjustments, loss-history ILM estimation, and position-level market and CVA calculations. Mortgage and CRE weights, global denominators, generic asset classification, and the illustrative US floor application remain **stylized/unverified**. Market risk and CVA are placeholder inputs.
 
-Only the displayed CET1 planning hurdle is checked for capital adequacy. Method 2, legal GSIB designation, full leverage and total-capital requirements, TLAC payout buffers, and legal debt eligibility are outside scope. Regulatory citations establish the named mechanics only; outputs are not regulatory filings, accounting opinions, or current final Endgame implementation estimates.
+The CET1 planning hurdle and leverage headrooms are reported separately. Method 2, legal GSIB designation, full total-capital requirements and leverage eligibility, TLAC payout buffers, and legal debt eligibility are outside scope. Regulatory citations establish the named mechanics only; outputs are not regulatory filings, accounting opinions, or current final Endgame implementation estimates.
+
+## Leverage
+
+`leverage.py` adds Tier 1 leverage, supplementary leverage ratio (SLR), exposure reconciliation, leverage buffers, and isolated sensitivities. `leverage_config.py` centralizes schemas, rule constants, and illustrative parameters. `tier1_ratio` in the existing capital projection remains the Tier 1/RWA ratio. Run `python examples/run_leverage.py`; see [leverage_summary.md](examples/output/leverage_summary.md) and [slr_path.csv](examples/output/slr_path.csv).
+
+The rule specification uses 12 CFR part 217 as of 2026-10-19. Linked rule paragraphs were also checked through Cornell's CFR text on 2026-10-21. Minimums are CET1 4.5%, Tier 1 6%, total capital 8%, leverage 4%, and SLR 3% for advanced approaches or Category III institutions. Tier 1 leverage is `Tier1 / (average consolidated assets - Tier1 deductions)`. SLR is `Tier1 / TLE`. TLE adds calendar-daily average on-balance assets and three month-end average off-balance exposures, subtracting applicable deductions once. [217.10(a)(1), (b)(4), (c)(1)](https://www.law.cornell.edu/cfr/text/12/217.10).
+
+| Component | Formula or treatment | Rule paragraph |
+| :- | :- | :- |
+| On-balance assets | Carrying value + sales-treatment repo securities - Tier 1 deductions - unrehypothecated security-for-security receipts - derivative fair-value assets | 217.10(c)(2)(i) |
+| Derivative PFE | `alpha * A * min(1, 0.05 + 0.95 * exp(V / (1.9 * A)))`, C=0; A=0 gives zero PFE | 217.10(c)(2)(ii)(B); 217.132(c)(7)(i) |
+| Replacement cost | `alpha * max(V - eligible CVMr + eligible CVMp, 0)`; alpha=1 for commercial end-users, otherwise 1.4 | 217.10(c)(2)(iii)(B), (C)-(G) |
+| Sold credit protection | `max(sold effective notional - eligible allocated purchased protection - CET1 fair-value losses, 0)` | 217.10(c)(2)(iv) |
+| Gross repo receivables | Add gross less already on-balance receivables when netting criteria fail | 217.10(c)(2)(v) |
+| Repo counterparty exposure | Without QMNA: `sum(max(E_i - C_i, 0))`; with QMNA: `max(sum(E_i) - sum(C_i), 0)` per counterparty and agreement | 217.10(c)(2)(vi) |
+| Commitments | Notional times floored CCF: cancelable 10%; commitments up to one year and short trade contingents 20%; longer commitments and transaction contingents 50%; guarantees and financial standby LCs 100% | 217.10(c)(2)(viii); 217.33(b) |
+| Custodial exclusion | Subtract daily `min(qualifying central-bank funds, linked fiduciary/custodial deposits)` when eligibility switch is on; default off | 217.10(c)(2)(x) |
+
+Sources: [217.10(c)(2)](https://www.law.cornell.edu/cfr/text/12/217.10#c_2), [217.132(c)(7)](https://www.law.cornell.edu/cfr/text/12/217.132#c_7), [217.33(b)](https://www.law.cornell.edu/cfr/text/12/217.33#b).
+
+GSIB leverage buffer is `max(SLR - 3%, 0)`; BHC requirement is half the latest Method 1 surcharge. Subsidiary requirement is `min(1%, half the parent's surcharge)`. Relative to a positive requirement, buffers above 100% have no leverage payout limit; `(75%,100%]`, `(50%,75%]`, `(25%,50%]`, and at most 25% give maximum payout ratios of 60%, 40%, 20%, and 0%. `NaN` with `no_leverage_payout_limit=True` records no leverage limit. Other capital and retained-income restrictions can still bind. [217.11(a)(2)(v), (c)(4), Table 2](https://www.law.cornell.edu/cfr/text/12/217.11).
+
+### Generated synthetic exposure reconciliation
+
+USD billions, as of illustrative 2026-09-30. Tier 1 is 23, total leverage exposure is **392.804632**, Tier 1 leverage is **9.236948%**, and SLR is **5.855328%**. Component rows are additive; no duplicate total row is included. Computed TLE replaces the former 270 placeholder in hypothetical TLAC/LTD leverage checks.
+
+| component | rule_paragraph | amount |
+| :- | :- | :- |
+| on_balance_assets | 217.10(c)(2)(i) | 250.000000 |
+| securities_sales_treatment | 217.10(c)(2)(i) | 1.500000 |
+| tier1_deductions | 217.10(c)(2)(i) | -1.000000 |
+| securities_received_unrehypothecated | 217.10(c)(2)(i) | -0.500000 |
+| derivative_fair_value_assets | 217.10(c)(2)(i) | -8.000000 |
+| derivative_pfe | 217.10(c)(2)(ii)(B) | 44.799077 |
+| derivative_replacement_cost | 217.10(c)(2)(iii)(B) | 12.405555 |
+| sold_credit_protection | 217.10(c)(2)(iv) | 28.000000 |
+| gross_repo_receivables | 217.10(c)(2)(v) | 5.000000 |
+| repo_counterparty_exposure | 217.10(c)(2)(vi) | 1.500000 |
+| off_balance_commitments | 217.10(c)(2)(viii) | 59.100000 |
+| custodial_exclusion | 217.10(c)(2)(x) | 0.000000 |
+
+### Generated nine-quarter path
+
+All three configurations share these ratios. The illustrative GSIB uses Method 1 surcharge 2.0%, giving BHC and subsidiary requirements of 1.0%. Category III has no leverage buffer. Headrooms below use percentage points (pp).
+
+| scenario | quarter | Tier 1 leverage, % | SLR, % |
+| :- | :- | :- | :- |
+| baseline | 1 | 9.405407 | 5.962131 |
+| baseline | 2 | 9.560745 | 6.060628 |
+| baseline | 3 | 9.725198 | 6.164901 |
+| baseline | 4 | 9.892848 | 6.271201 |
+| baseline | 5 | 10.062399 | 6.378708 |
+| baseline | 6 | 10.233950 | 6.487481 |
+| baseline | 7 | 10.408381 | 6.598082 |
+| baseline | 8 | 10.583626 | 6.709200 |
+| baseline | 9 | 10.761052 | 6.821702 |
+| severely_adverse | 1 | 7.041333 | 4.463443 |
+| severely_adverse | 2 | 7.087694 | 4.492734 |
+| severely_adverse | 3 | 7.017245 | 4.448055 |
+| severely_adverse | 4 | 6.895424 | 4.370829 |
+| severely_adverse | 5 | 6.742603 | 4.273965 |
+| severely_adverse | 6 | 6.610871 | 4.190479 |
+| severely_adverse | 7 | 6.480780 | 4.108038 |
+| severely_adverse | 8 | 6.362190 | 4.032887 |
+| severely_adverse | 9 | 6.259919 | 3.968080 |
+
+| scenario | configuration | Minimum SLR, % | minimum_slr_quarter | Buffer requirement, % | Headroom to 3%, pp | Headroom to 3% plus buffer, pp |
+| :- | :- | :- | :- | :- | :- | :- |
+| baseline | category_iii_illustrative | 5.962131 | 1 | 0.000000 | 2.962131 | 2.962131 |
+| baseline | gsib_bhc_illustrative | 5.962131 | 1 | 1.000000 | 2.962131 | 1.962131 |
+| baseline | gsib_subsidiary_illustrative | 5.962131 | 1 | 1.000000 | 2.962131 | 1.962131 |
+| severely_adverse | category_iii_illustrative | 3.968080 | 9 | 0.000000 | 0.968080 | 0.968080 |
+| severely_adverse | gsib_bhc_illustrative | 3.968080 | 9 | 1.000000 | 0.968080 | -0.031920 |
+| severely_adverse | gsib_subsidiary_illustrative | 3.968080 | 9 | 1.000000 | 0.968080 | -0.031920 |
+
+Adverse Q9 remains above the 3% minimum but falls below the illustrative 4% GSIB hurdle. Its leverage-only maximum payout ratio is 60%. The model reports that constraint without changing the existing planned distributions.
+
+| sensitivity | total_leverage_exposure | exposure_change_bn | slr | slr_change_bp |
+| :- | :- | :- | :- | :- |
+| repo_matched_book_plus_10bn_illustrative | 402.804632 | 10.000000 | 0.057100 | -14.536397 |
+| remove_1_4_factor_illustrative | 380.382753 | -12.421879 | 0.060465 | 19.121312 |
+| custodial_exclusion_illustrative | 386.804632 | -6.000000 | 0.059462 | 9.082613 |
+
+### Leverage assumptions and limitations
+
+All inputs and outputs are synthetic. **Illustrative assumptions:** Q3 2026 business-day shocks carry forward across weekends, producing 92 daily balances. Three month-end snapshots contain ten derivative netting sets each. Projected closing assets equal starting assets plus gross loan growth less allowance growth, holding other assets fixed. Quarterly average assets use the mean of opening and closing balances. Derivative and off-balance exposures retain the as-of mix and scale by average projected assets; deductions and AT1 stay fixed. The subsidiary view compares requirements on the same balance sheet, not a separate legal entity.
+
+Aggregated SA-CCR add-on A is supplied, not rebuilt from hedging sets. A boolean asserts cash-margin eligibility. Purchased credit protection is an allocated, eligible amount represented by a matched-reference/maturity flag; full contractual eligibility and hedge-value adjustments are not calculated. Repo inputs identify separate agreements and amounts already included on balance sheet. Matched-book growth assumes 10bn additional funded on-balance receivables with equal collateral and no added counterparty exposure. Removing 1.4 is a counterfactual sensitivity, not a regulatory election. Custodial eligibility is assumed only for that sensitivity. Agency indemnities, clearing exceptions, shared margin agreements, full deduction eligibility, and interactions with other payout restrictions are outside scope. No external bank data is downloaded or required.
 
 ## License
 

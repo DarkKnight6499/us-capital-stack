@@ -54,6 +54,18 @@ The SCB reference excludes common dividends and buybacks. Planning paths include
 | historical_2023_us_dual_stack_proxy | 171.662779 | 17.439618 | 6.000000 | 2.000000 | 197.102397 | 0.000000 | 0.000000 | 0.106544 | 19.238728 | 0.084617 | 16.678170 | 1.627919 | 2.271477 | 4.321830 | 197.102397 | 198.102397 | 180.863669 | Verified dual-stack structure; proxy credit and market inputs; ILM assumed one |
 
 
+## Illustrative leverage minima
+
+| scenario | configuration | minimum_slr | minimum_slr_quarter | buffer_requirement | headroom_to_3pct | headroom_to_3pct_plus_buffer |
+| :- | :- | :- | :- | :- | :- | :- |
+| baseline | category_iii_illustrative | 0.059621 | 1 | 0.000000 | 0.029621 | 0.029621 |
+| baseline | gsib_bhc_illustrative | 0.059621 | 1 | 0.010000 | 0.029621 | 0.019621 |
+| baseline | gsib_subsidiary_illustrative | 0.059621 | 1 | 0.010000 | 0.029621 | 0.019621 |
+| severely_adverse | category_iii_illustrative | 0.039681 | 9 | 0.000000 | 0.009681 | 0.009681 |
+| severely_adverse | gsib_bhc_illustrative | 0.039681 | 9 | 0.010000 | 0.009681 | -0.000319 |
+| severely_adverse | gsib_subsidiary_illustrative | 0.039681 | 9 | 0.010000 | 0.009681 | -0.000319 |
+
+
 ## Accounting residuals
 
 | scenario | max_cet1_residual_bn | max_allowance_residual_bn | max_loan_balance_residual_bn | max_ifrs_reconciliation_residual_bn |

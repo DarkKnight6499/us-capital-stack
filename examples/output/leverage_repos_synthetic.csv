@@ -1,0 +1,13 @@
+counterparty,repo_netting_set_id,qmna,E_i,C_i,gross_receivable,on_balance_receivable,netting_criteria_met,month_end
+dealer_a,agreement_a,True,34.3,33.32,34.3,29.4,True,2026-07-31
+dealer_a,agreement_a,True,24.5,24.99,24.5,19.6,True,2026-07-31
+dealer_b,agreement_b,False,19.6,18.62,19.6,14.7,False,2026-07-31
+dealer_c,agreement_c,False,11.76,12.74,11.76,9.8,True,2026-07-31
+dealer_a,agreement_a,True,35,34,35,30,True,2026-08-31
+dealer_a,agreement_a,True,25,25.5,25,20,True,2026-08-31
+dealer_b,agreement_b,False,20,19,20,15,False,2026-08-31
+dealer_c,agreement_c,False,12,13,12,10,True,2026-08-31
+dealer_a,agreement_a,True,35.7,34.68,35.7,30.6,True,2026-09-30
+dealer_a,agreement_a,True,25.5,26.01,25.5,20.4,True,2026-09-30
+dealer_b,agreement_b,False,20.4,19.38,20.4,15.3,False,2026-09-30
+dealer_c,agreement_c,False,12.24,13.26,12.24,10.2,True,2026-09-30

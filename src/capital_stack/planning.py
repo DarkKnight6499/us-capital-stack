@@ -6,7 +6,10 @@ import numpy as np
 import pandas as pd
 
 from .cecl import CreditSettings, allowances, project_credit
-from .data import DEFAULT_SEED, loan_balance_paths, reference_scenario, synthetic_bank, synthetic_scenarios
+from .data import DEFAULT_SEED, loan_balance_paths, reference_scenario, synthetic_bank, synthetic_scenarios, synthetic_leverage_inputs
+from . import leverage_config as leverage_config
+from .leverage import (leverage_sensitivities, leverage_views, monthly_exposure_components,
+                       project_leverage, summarize_leverage, total_leverage_exposure)
 from .endgame import business_indicator, business_indicator_component, compare_endgame, credit_rwa_table, current_standardized_rwa
 from .models import Bank
 from .ppnr import PPNRSettings, income_statement_run_rate, project_ppnr
@@ -132,8 +135,25 @@ def run_plan(seed: int = DEFAULT_SEED, credit_settings: CreditSettings = CreditS
     debt = pd.DataFrame({"principal_bn": [12., 5., 3., 10.], "days_to_maturity": [1500, 500, 200, 1800],
                          "eligible": [True, True, True, False]})
     tables["debt_schedule_synthetic"] = debt
+    leverage_inputs = synthetic_leverage_inputs(bank, seed)
+    reconciliation = total_leverage_exposure(leverage_inputs)
+    tables["leverage_exposure_reconciliation"] = reconciliation
+    tables["leverage_month_end_exposures"] = monthly_exposure_components(leverage_inputs)
+    tables["leverage_daily_assets_synthetic"] = leverage_inputs.daily_assets
+    tables["leverage_derivatives_synthetic"] = leverage_inputs.derivatives
+    tables["leverage_credit_protection_synthetic"] = leverage_inputs.credit_protection
+    tables["leverage_repos_synthetic"] = leverage_inputs.repos
+    tables["leverage_commitments_synthetic"] = leverage_inputs.commitments
+    leverage_paths = []
+    for name, capital in projections.items():
+        path = project_leverage(bank, capital, tables[f"balances_{name}"], tables[f"credit_{name}"], leverage_inputs)
+        path[leverage_config.SCENARIO] = name
+        leverage_paths.append(leverage_views(path))
+    tables["slr_path"] = pd.concat(leverage_paths, ignore_index=True)
+    tables["leverage_minima"] = summarize_leverage(tables["slr_path"])
+    tables["leverage_sensitivities"] = leverage_sensitivities(leverage_inputs, bank.cet1 + bank.at1)
     tables["tlac_ltd_hypothetical"] = tlac_ltd_check(bank.cet1, bank.at1, debt,
-                                                    current_standardized_rwa(bank), amounts["total_exposures"],
+                                                    current_standardized_rwa(bank), float(reconciliation[leverage_config.AMOUNT].sum()),
                                                     surcharge, surcharge, applicable=False)
     residuals = []
     for name, capital in projections.items():

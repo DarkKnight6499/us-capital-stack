@@ -1,0 +1,7 @@
+scenario,configuration,minimum_slr,minimum_slr_quarter,buffer_requirement,headroom_to_3pct,headroom_to_3pct_plus_buffer
+baseline,category_iii_illustrative,0.0596213090742,1,0,0.0296213090742,0.0296213090742
+baseline,gsib_bhc_illustrative,0.0596213090742,1,0.01,0.0296213090742,0.0196213090742
+baseline,gsib_subsidiary_illustrative,0.0596213090742,1,0.01,0.0296213090742,0.0196213090742
+severely_adverse,category_iii_illustrative,0.0396808026163,9,0,0.0096808026163,0.0096808026163
+severely_adverse,gsib_bhc_illustrative,0.0396808026163,9,0.01,0.0096808026163,-0.000319197383704
+severely_adverse,gsib_subsidiary_illustrative,0.0396808026163,9,0.01,0.0096808026163,-0.000319197383704

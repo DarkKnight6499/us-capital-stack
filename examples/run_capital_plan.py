@@ -24,6 +24,7 @@ def main() -> None:
                 "## SCB calculation", markdown_table(plan.tables["scb_calculation"]),
                 "## Credit accounting comparison", markdown_table(plan.tables["cecl_ifrs9_totals"]),
                 "## Historical proposal comparison", markdown_table(plan.tables["endgame_impact"]),
+                "## Illustrative leverage minima", markdown_table(plan.tables["leverage_minima"]),
                 "## Accounting residuals", markdown_table(plan.tables["validation_residuals"], scientific=True),
                 "Historical proposal only. Mortgage and CRE proxy weights and GSIB denominators are stylized/unverified. Market and CVA inputs are placeholders. TLAC and debt checks are hypothetical and not applicable to this synthetic bank."]
     (output / "capital_plan_summary.md").write_text("\n\n".join(sections) + "\n", encoding="utf-8")

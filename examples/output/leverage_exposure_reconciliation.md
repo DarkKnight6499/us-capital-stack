@@ -1,0 +1,14 @@
+| component | rule_paragraph | amount |
+| :- | :- | :- |
+| on_balance_assets | 217.10(c)(2)(i) | 250.000000 |
+| securities_sales_treatment | 217.10(c)(2)(i) | 1.500000 |
+| tier1_deductions | 217.10(c)(2)(i) | -1.000000 |
+| securities_received_unrehypothecated | 217.10(c)(2)(i) | -0.500000 |
+| derivative_fair_value_assets | 217.10(c)(2)(i) | -8.000000 |
+| derivative_pfe | 217.10(c)(2)(ii)(B) | 44.799077 |
+| derivative_replacement_cost | 217.10(c)(2)(iii)(B) | 12.405555 |
+| sold_credit_protection | 217.10(c)(2)(iv) | 28.000000 |
+| gross_repo_receivables | 217.10(c)(2)(v) | 5.000000 |
+| repo_counterparty_exposure | 217.10(c)(2)(vi) | 1.500000 |
+| off_balance_commitments | 217.10(c)(2)(viii) | 59.100000 |
+| custodial_exclusion | 217.10(c)(2)(x) | 0.000000 |

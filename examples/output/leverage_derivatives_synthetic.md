@@ -1,0 +1,32 @@
+| netting_set_id | counterparty_type | is_commercial_end_user | fair_value_V | aggregated_addon_A | cvm_received | cvm_posted | cvm_eligible | month_end |
+| :- | :- | :- | :- | :- | :- | :- | :- | :- |
+| netting_set_0 | commercial_end_user | True | 0.693060 | 3.855736 | 0.134830 | 0.259859 | False | 2026-07-31 00:00:00 |
+| netting_set_1 | financial | False | 0.505839 | 3.245726 | 0.131786 | 0.324250 | True | 2026-07-31 00:00:00 |
+| netting_set_2 | financial | False | -0.516406 | 3.217816 | 0.442844 | 0.442189 | True | 2026-07-31 00:00:00 |
+| netting_set_3 | financial | False | 1.330759 | 4.526669 | 0.413647 | 0.373459 | False | 2026-07-31 00:00:00 |
+| netting_set_4 | commercial_end_user | True | 1.742958 | 3.018440 | 0.093064 | 0.414710 | True | 2026-07-31 00:00:00 |
+| netting_set_5 | financial | False | 1.913534 | 3.342367 | 0.363170 | 0.090359 | True | 2026-07-31 00:00:00 |
+| netting_set_6 | financial | False | 1.644279 | 3.297079 | 0.369298 | 0.039327 | False | 2026-07-31 00:00:00 |
+| netting_set_7 | financial | False | -0.505569 | 3.346498 | 0.364133 | 0.083079 | True | 2026-07-31 00:00:00 |
+| netting_set_8 | commercial_end_user | True | -0.541023 | 4.082950 | 0.075981 | 0.125390 | True | 2026-07-31 00:00:00 |
+| netting_set_9 | financial | False | 1.400065 | 3.233913 | 0.203232 | 0.354656 | False | 2026-07-31 00:00:00 |
+| netting_set_0 | commercial_end_user | True | 0.707204 | 3.934425 | 0.137582 | 0.265162 | False | 2026-08-31 00:00:00 |
+| netting_set_1 | financial | False | 0.516162 | 3.311965 | 0.134476 | 0.330867 | True | 2026-08-31 00:00:00 |
+| netting_set_2 | financial | False | -0.526945 | 3.283486 | 0.451882 | 0.451213 | True | 2026-08-31 00:00:00 |
+| netting_set_3 | financial | False | 1.357917 | 4.619050 | 0.422089 | 0.381081 | False | 2026-08-31 00:00:00 |
+| netting_set_4 | commercial_end_user | True | 1.778529 | 3.080041 | 0.094963 | 0.423173 | True | 2026-08-31 00:00:00 |
+| netting_set_5 | financial | False | 1.952586 | 3.410579 | 0.370581 | 0.092203 | True | 2026-08-31 00:00:00 |
+| netting_set_6 | financial | False | 1.677836 | 3.364367 | 0.376834 | 0.040130 | False | 2026-08-31 00:00:00 |
+| netting_set_7 | financial | False | -0.515886 | 3.414794 | 0.371564 | 0.084774 | True | 2026-08-31 00:00:00 |
+| netting_set_8 | commercial_end_user | True | -0.552065 | 4.166275 | 0.077532 | 0.127949 | True | 2026-08-31 00:00:00 |
+| netting_set_9 | financial | False | 1.428638 | 3.299911 | 0.207379 | 0.361894 | False | 2026-08-31 00:00:00 |
+| netting_set_0 | commercial_end_user | True | 0.721348 | 4.013113 | 0.140333 | 0.270465 | False | 2026-09-30 00:00:00 |
+| netting_set_1 | financial | False | 0.526485 | 3.378205 | 0.137165 | 0.337485 | True | 2026-09-30 00:00:00 |
+| netting_set_2 | financial | False | -0.537484 | 3.349156 | 0.460920 | 0.460238 | True | 2026-09-30 00:00:00 |
+| netting_set_3 | financial | False | 1.385075 | 4.711431 | 0.430531 | 0.388703 | False | 2026-09-30 00:00:00 |
+| netting_set_4 | commercial_end_user | True | 1.814099 | 3.141642 | 0.096862 | 0.431637 | True | 2026-09-30 00:00:00 |
+| netting_set_5 | financial | False | 1.991637 | 3.478790 | 0.377993 | 0.094047 | True | 2026-09-30 00:00:00 |
+| netting_set_6 | financial | False | 1.711392 | 3.431654 | 0.384371 | 0.040932 | False | 2026-09-30 00:00:00 |
+| netting_set_7 | financial | False | -0.526204 | 3.483090 | 0.378995 | 0.086470 | True | 2026-09-30 00:00:00 |
+| netting_set_8 | commercial_end_user | True | -0.563106 | 4.249601 | 0.079082 | 0.130508 | True | 2026-09-30 00:00:00 |
+| netting_set_9 | financial | False | 1.457210 | 3.365910 | 0.211527 | 0.369131 | False | 2026-09-30 00:00:00 |

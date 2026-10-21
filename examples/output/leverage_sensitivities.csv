@@ -1,0 +1,4 @@
+sensitivity,total_leverage_exposure,exposure_change_bn,slr,slr_change_bp
+repo_matched_book_plus_10bn_illustrative,402.804631976,10,0.0570996413004,-14.5363971431
+remove_1_4_factor_illustrative,380.382753454,-12.4218785226,0.060465412249,19.1213123429
+custodial_exclusion_illustrative,386.804631976,-6,0.0594615423359,9.08261321209

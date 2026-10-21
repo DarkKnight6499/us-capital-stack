@@ -1,0 +1,13 @@
+component,rule_paragraph,amount
+on_balance_assets,217.10(c)(2)(i),250
+securities_sales_treatment,217.10(c)(2)(i),1.5
+tier1_deductions,217.10(c)(2)(i),-1
+securities_received_unrehypothecated,217.10(c)(2)(i),-0.5
+derivative_fair_value_assets,217.10(c)(2)(i),-8
+derivative_pfe,217.10(c)(2)(ii)(B),44.7990773823
+derivative_replacement_cost,217.10(c)(2)(iii)(B),12.405554594
+sold_credit_protection,217.10(c)(2)(iv),28
+gross_repo_receivables,217.10(c)(2)(v),5
+repo_counterparty_exposure,217.10(c)(2)(vi),1.5
+off_balance_commitments,217.10(c)(2)(viii),59.1
+custodial_exclusion,217.10(c)(2)(x),0

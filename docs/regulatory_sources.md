@@ -21,3 +21,19 @@ Sources were read during construction and rechecked against the linked primary t
 | Leverage buffer input | Half the Method 1 surcharge for the holding company; caller supplies effective surcharge inputs | [12 CFR 217.11(a)(2)(v)](https://www.law.cornell.edu/cfr/text/12/217.11) |
 
 Mortgage and CRE expanded proxy weights, the requested floor using current US RWA, global GSIB denominators, generic asset classification, and the relative-PD accounting threshold are **stylized/unverified**. ILM equal to one is a deliberate assumption. Market and CVA RWA are placeholders. No current official scenario observations are included in the seeded examples.
+
+
+## Leverage extension verification, 2026-10-21
+
+The supplied rule specification is dated 2026-10-19. Cornell CFR paragraphs below were read directly on 2026-10-21. The eCFR 217.10 page was inaccessible through the web reader. No external bank observations were fetched; all exposure snapshots are generated locally. The SA-CCR multiplier equation was supplied in the specification; Cornell's HTML extraction exposed its definitions and paragraph reference but omitted the equation graphic.
+
+[BIS CRE52.22-.23](https://www.bis.org/committees/bcbs/basel-framework/standard/cre?allChapters=true&chapter=52) independently confirms the 5% multiplier floor and unit multiplier when undercollateralized. Its equation SVG was inaccessible to the web reader because that content type was unsupported. The eCFR versioner XML endpoint also failed through the web reader; the offline shell was not used for network requests.
+
+| Mechanics | Paragraphs checked | Source |
+| :- | :- | :- |
+| Minimums, ordinary leverage, daily/monthly TLE timing, components and custodial cap | 217.10(a)(1), (b)(4), (c)(1), (c)(2)(i)-(vi), (viii), (x) | [217.10](https://www.law.cornell.edu/cfr/text/12/217.10) |
+| PFE product, definitions V/C/A and aggregated add-on | 217.132(c)(7)(i)-(ii); multiplier equation supplied in specification | [217.132](https://www.law.cornell.edu/cfr/text/12/217.132#c_7) |
+| Commitment CCFs and maturity boundary | 217.33(b)(1)-(4) | [217.33](https://www.law.cornell.edu/cfr/text/12/217.33#b) |
+| BHC and subsidiary requirements, leverage buffer, payout bands | 217.11(a)(2)(v)(A)-(B), (c)(4), Table 2 | [217.11](https://www.law.cornell.edu/cfr/text/12/217.11) |
+
+Repo paragraph (v) explicitly subtracts amounts already on balance sheet. The extension therefore requires `on_balance_receivable` and a separate agreement identifier to prevent double counting and cross-agreement netting. The subsidiary result is a requirement comparison on the illustrative balance sheet, not full legal-entity reporting or the full 217.11(f) payout calculation.
